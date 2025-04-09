@@ -1,0 +1,533 @@
+---
+title: "Project"
+output: pdf_document
+urlcolor: blue
+---
+#library
+```{r}
+library(tidyverse)
+library(polite)
+library(rvest)
+library(purrr)
+library(readxl)
+library(rvest)
+library(httr)
+library(tidyr)
+library(dplyr)
+library(ggmap)
+library(DT)
+library(shiny)
+library(googleway)
+```
+#Define the Zipcode
+```{r}
+ZIP_CODES <- c('02108','02109','02110','02111','02113','02114','02115','02116','02118','02119','02120','02121','02122','02124','02125','02126','02127','02128','02129','02130', '02131','02132','02135','02136','02151','02152','02163','02199','02203','02210','02215','02467')
+BASE_URL <- 'https://www.autoblog.com/'
+```
+
+```{r}
+session <- bow(
+  url = BASE_URL,  # base URL
+  user_agent = "Zhihong Zhang",  # identify ourselves
+  force = TRUE
+)
+print(session)
+```
+#For Getting the Gas Price
+```{r}
+scrape_gas_polite <- function(ZIP_NUMBER,PAGE_NUMBER){    
+    
+    URL <- paste0(BASE_URL, ZIP_NUMBER, '-gas-prices/',PREMIUM, 'pg-', PAGE_NUMBER, '/')
+    HTML_DOC <- read_html(URL)
+        
+         TABLE <- HTML_DOC %>%
+      html_elements('li.shop') %>%
+      html_text2()
+
+    STATION_NAMES <- HTML_DOC %>%
+      html_elements('li.name') %>%
+      html_elements('h4') %>%
+      html_text2()
+
+    STATION_ADDRESSES <- HTML_DOC %>%
+      html_elements('li.name') %>%
+      html_elements('address') %>%
+      html_text2()
+
+    STATION_PRICES <- HTML_DOC %>%
+      html_elements('li.slab') %>%
+      html_elements('.price') %>%
+      html_text2()
+    
+    TYPE <- TYPES[[z]]
+    
+    
+    df <- bind_cols(STATION_NAMES, STATION_ADDRESSES, STATION_PRICES, TYPE)
+    return(df)
+    }
+URL <- paste0(BASE_URL, '02108', '-gas-prices/','', 'pg-', '1', '/')
+HTML_DOC <- read_html(URL)
+```
+
+
+```{r}
+df_list <- list()
+count = 1
+PREMIUMS <- list('','premium/')
+TYPES <-  list('Normal','Premium')
+for (z in 1:2) {  
+    PREMIUM = PREMIUMS[[z]]
+    for (x in 1:length(ZIP_CODES)) {
+        TOTAL_PAGES <- HTML_DOC %>%
+          html_elements('span.totalResults') %>%  
+          html_text2() %>%
+          as.numeric()
+        ZIP = ZIP_CODES[x]
+        for (y in seq(1:TOTAL_PAGES)) {
+            df_list[[count]] <- scrape_gas_polite(ZIP, y)
+            count = count+1
+            }
+        }
+    }
+all_dfs <- bind_rows(df_list)
+names(all_dfs)[1] <- "Company"
+names(all_dfs)[2] <- "Address"
+names(all_dfs)[3] <- "Cost"
+names(all_dfs)[4] <- "Type"
+all_dfs <- all_dfs %>% distinct(Address, Type, .keep_all = TRUE)
+all_dfs$'Cost' <- as.numeric(gsub('¤','',all_dfs$'Cost'))
+```
+
+```{r}
+df_normal <- all_dfs %>% filter(Type == 'Normal')
+df_premium <- all_dfs %>% filter(Type == 'Premium')
+df_normal <- subset(df_normal, select = -c(Type))  
+df_premium <- subset(df_premium, select = -c(Type)) 
+df_normal <- df_normal %>% select(Company, Address, Cost)
+df_premium <- df_premium %>% select(Company, Address, Cost)
+names(df_normal)[3] <- "Cost_Normal"
+names(df_premium)[3] <- "Cost_Premium"
+```
+
+```{r}
+write.csv(df_premium,"final_project_premium.csv", row.names = FALSE)
+write.csv(df_normal,"final_project_normal.csv", row.names = FALSE)
+write.csv(all_dfs,"final_project.csv", row.names = FALSE)
+```
+
+```{r}
+all_dfs <- left_join(df_normal,df_premium, by = "Address", copy = FALSE)
+```
+
+```{r}
+write.csv(all_dfs, file="/Users/ted/Desktop/final_project.csv", row.names = FALSE)
+```
+
+```{r}
+names(all_dfs)[1] <- "Company"
+all_dfs <- all_dfs %>% select(Company, Address, Cost_Normal, Cost_Premium)
+```
+#For getting the gas station location(lat and long)
+```{r}
+# Read in the CSV data and store it in a variable 
+origAddress <- read.csv(file="/Users/ted/Desktop/final_project.csv", stringsAsFactors = FALSE)
+
+# Initialize the data frame
+geocoded <- data.frame(stringsAsFactors = FALSE)
+
+#API
+register_google(key ="YOUR_API_KEY_HERE",write = TRUE )
+
+# Loop through the addresses to get the latitude and longitude of each address and add it to the
+# origAddress data frame in new columns lat and lon
+for(i in 1:nrow(origAddress))
+{
+  result <- geocode(origAddress$Address[i], output = "latlona", source = "google")
+  origAddress$lon[i] <- as.numeric(result[1])
+  origAddress$lat[i] <- as.numeric(result[2])
+  origAddress$geoAddress[i] <- as.character(result[3])
+}
+# Write a CSV file containing origAddress to the working directory
+write.csv(origAddress, "/Users/ted/Desktop/final_project.csv", row.names=FALSE)
+```
+#For Getting MPG
+```{r}
+URL2 <- paste0(BASE_URL,'research/')
+HTML_DOC <- read_html(URL2)
+  TABLE2 <- HTML_DOC %>%
+  html_elements('li.shop') %>%
+  html_text2()  
+
+  CAR_TYPE <- HTML_DOC %>%
+  html_elements('div') %>%
+  html_elements('section.make-list') %>%
+  html_elements('li.item') %>% 
+  html_text2()
+
+CAR_TYPE  
+
+scrape_mpg_polite <- function(CAR_TYPE){    
+    
+    URL3 <- paste0(BASE_URL, CAR_TYPE) 
+    URL3 <-nod(session,URL3)
+     print(URL3)
+     HTML_DOC <- scrape(URL3)
+     
+     TABLE3 <- HTML_DOC %>%
+     html_elements('li.shop') %>%
+     html_text2()  
+
+     CAR_NAMES <- HTML_DOC %>%
+     html_elements('section.most-popular') %>%  
+     html_elements('li.item') %>%
+     html_elements('h6') %>%
+     html_text2()
+
+     CAR_MPG <- HTML_DOC %>%
+     html_elements('section.most-popular') %>%    
+     html_elements('li.item') %>%
+     html_elements('dl') %>% 
+     html_elements('dd:last-child')%>%
+     html_text2()
+     
+    
+    df <- bind_cols(CAR_NAMES, CAR_MPG)
+    return(df)
+}
+```
+#Clean Data
+```{r}
+CAR_TYPE <- str_replace(CAR_TYPE, pattern = ' ', replacement = '+')
+CAR_TYPE <- str_replace(CAR_TYPE, pattern = '-', replacement = '_')
+ALL_DFS <- map_dfr(.x= CAR_TYPE,
+                    .f =scrape_mpg_polite)
+names(ALL_DFS)[1] ="CAR_NAMES"
+names(ALL_DFS)[2] ="MPG"
+
+CN <- ALL_DFS %>% select(CAR_NAMES)
+CN1 <- as.data.frame(CN)
+CN1_REGEX<- paste0(CAR_TYPE, collapse = ' | ')
+CLEANDATA<-CN1 %>% 
+  mutate(Year=as.numeric(str_extract(string = CAR_NAMES, pattern = '[:digit:]+')),
+         Type= str_squish(str_extract(string = CAR_NAMES, pattern = CN1_REGEX)),
+         Model = str_squish(str_extract(string = CAR_NAMES, pattern = paste0('(?<=', Type, ' ).*')))) 
+
+CLEANDATA1<-ALL_DFS %>% 
+  mutate(City_MPG=as.numeric(str_extract(string = MPG, pattern = '[:digit:]+'))) %>% 
+  select(CAR_NAMES,City_MPG)
+
+CLEANDATA_FINAL<- merge(CLEANDATA, CLEANDATA1, by='CAR_NAMES') %>% 
+  select(Year,Type,Model,City_MPG)
+
+write.csv(CLEANDATA_FINAL, file="/Users/ted/Desktop/CLEANDATA_FINAL.csv", row.names = FALSE)
+CLEANDATA_FINAL<-na.omit(CLEANDATA_FINAL)
+```
+
+#Distance
+```{r}
+key <- "YOUR_API_KEY_HERE"
+
+GW<-google_distance(origins = list(c(37.193489,-121.07395)),
+                destinations = list(c(37.151616,-121.046586)),
+                key = key, 
+                simplify = T,
+                units = "imperial")
+#seconds
+Duration <- GW$rows$elements[[1]]$duration$value
+#meters
+Distance<- GW$rows$elements[[1]]$distance$value  
+
+```
+## import dataset
+```{r}
+fp<-read.csv("/Users/ted/Desktop/final_project.csv")
+```
+
+#Final Work:First Part(Finding MPG)
+```{r}
+shinyApp(
+server=function(input, output) {
+
+  # Filter data based on selections
+  output$table <- DT::renderDataTable(DT::datatable({
+    data <- CLEANDATA_FINAL
+    if (input$Year != "All") {
+      data <- data[data$Year == input$Year,]
+    }
+    if (input$Type != "All") {
+      data <- data[data$Type == input$Type,]
+    }
+    if (input$Model != "All") {
+      data <- data[data$Model == input$Model,]
+    }
+    data
+  }))},
+  
+  ui=fluidPage(
+  titlePanel("MPG Finder"),
+
+  # Create a new Row in the UI for selectInputs
+  fluidRow(
+    column(4,
+        selectInput("Year",
+                    "Year:",
+                    c("All",
+                      unique(as.character(CLEANDATA_FINAL$Year))))
+    ),
+    column(4,
+        selectInput("Type",
+                    "Type:",
+                    c("All",
+                      unique(as.character(CLEANDATA_FINAL$Type))))
+    ),
+    column(4,
+        selectInput("Model",
+                    "Model:",
+                    c("All",
+                      unique(as.character(CLEANDATA_FINAL$Model))))
+    )
+  ),
+  # Create a new row for the table.
+  DT::dataTableOutput("table")
+)
+)
+```
+
+
+#Final Work: Second Part(Getting location for the user)
+```{r}
+if (interactive()) {
+
+  
+shinyApp(
+  ui = fluidPage(
+  
+  titlePanel("Your Location"),
+  
+  tags$script('
+      $(document).ready(function () {
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+              
+        function onError (err) {
+          Shiny.onInputChange("geolocation", false);
+        }
+              
+        function onSuccess (position) {
+          setTimeout(function () {
+            var coords = position.coords;
+            console.log(coords.latitude + ", " + coords.longitude);
+            Shiny.onInputChange("geolocation", true);
+            Shiny.onInputChange("lat", coords.latitude);
+            Shiny.onInputChange("long", coords.longitude);
+          }, 1100)
+        }
+      });
+              '),
+  
+  # Show a plot of the generated distribution
+  fluidRow(column(width = 2,
+                  verbatimTextOutput("lat"),
+                  verbatimTextOutput("long"),
+                  verbatimTextOutput("geolocation"))
+  )
+),
+  server = function(input, output) {
+  
+  output$lat <- renderPrint({
+    input$lat
+  })
+  
+  output$long <- renderPrint({
+    input$long
+  })
+  })
+}
+
+```
+
+#Final Work: Third Part(Finding the Cheapest Gas)
+```{r}
+shinyApp(
+    ui = fixedPage(
+        h2('Cheapest Gas!'),
+        hr(),
+        sidebarLayout(
+            sidebarPanel(
+                numericInput("lat",
+                  "Latitude",
+                  min = -90,
+                  max = 90,
+                  value=42.34711),
+            
+                numericInput("lon",
+                  "Longitude",
+                  min = -180,
+                  max = 180,
+                  value=-71.14181),
+        
+                numericInput("mpg",
+                  "MPG(You can check the MPG Table)",
+                  value=14),
+                selectInput("gas", "Choose the Gas:",
+      list( "Regular", "Premium")
+    ),
+               
+               
+            ),
+            mainPanel(
+                HTML('<textarea id="ta" class="form-control shiny-text-output"',
+                     'style="resize:none; height:300px;" readonly></textarea>'
+                )
+            )
+        )
+    ),
+    server = function(input, output, session) {
+        output$ta <- renderText({
+            lat1<-input$lat
+            lon1<-input$lon
+            result<-data.frame()
+            for (i in seq(1:nrow(fp))){
+              lat2<-fp$lat[i]
+              lon2<-fp$lon[i]
+              GW<-google_distance(origins = list(c(lat1,lon1)),
+                destinations = list(c(lat2,lon2)),
+                key = key, 
+                simplify = T,
+                units = "imperial")
+              temp<-data.frame(Address=fp$Address[i],
+                               Regular=fp$Cost_Normal[i],
+                               Premium=fp$Cost_Premium[i],
+                            distance=GW$rows$elements[[1]]$distance$value)
+              result<-rbind(result,temp)
+            }
+            result1<-result[order(result$distance),]
+            if (input$gas=="Regular"){
+                paste(c(paste0("Three recommended gas stations, from near to far!"),
+                      paste0("Recommendation 1"),
+                      paste0("Address:",result1$Address[1]),
+                      paste0("Gas Use:", round(result1$distance[1]/1000/input$mpg, digits = 2)," Gallons"),
+                      paste0("Gas Price:",result1$Regular[1]),
+                      paste0("Recommendation 2"),
+                      paste0("Address:",result1$Address[2]),
+                      paste0("Gas Use:", round(result1$distance[2]/1000/input$mpg, digits = 2)," Gallons"),
+                      paste0("Gas Price:",result1$Regular[2]),
+                      paste0("Recommendation 3"),
+                      paste0("Address:",result1$Address[3]),
+                      paste0("Gas Use:", round(result1$distance[3]/1000/input$mpg, digits = 2)," Gallons"),
+                      paste0("Gas Price:",result1$Regular[3])),
+                      collapse='\n')
+            }else{
+              paste(c(paste0("Three recommended gas stations, from near to far！"),
+                      paste0("Recommendation 1"),
+                      paste0("Address:",result1$Address[1]),
+                      paste0("Gas Use:", round(result1$distance[1]/1000/input$mpg, digits = 2)," Gallons"),
+                      paste0("Gas Price:",result1$Premium[1]),
+                      paste0("Recommendation 2"),
+                      paste0("Address:",result1$Address[2]),
+                      paste0("Gas Use:",result1$distance[2]/1000/input$mpg," Gallons"),
+                      paste0("Gas Price:",result1$Premium[2]),
+                      paste0("Recommendation 3"),
+                      paste0("Address:",result1$Address[3]),
+                      paste0("Gas Use:",result1$distance[3]/1000/input$mpg," Gallons"),
+                      paste0("Gas Price:",result1$Premium[3])),
+                      collapse='\n')
+            }
+            
+          
+          
+
+        })
+    })
+
+```
+
+#Final Work: Third Part(Finding the Cheapest Gas)
+```{r}
+shinyApp(
+    ui = fixedPage(
+        h2('Cheapest Gas!'),
+        hr(),
+        sidebarLayout(
+            sidebarPanel(
+                numericInput("lat",
+                  "Latitude",
+                  min = -90,
+                  max = 90,
+                  value=42.34711),
+            
+                numericInput("lon",
+                  "Longitude",
+                  min = -180,
+                  max = 180,
+                  value=-71.14181),
+        
+                numericInput("mpg",
+                  "MPG(You can check the MPG Table)",
+                  value=14),
+                selectInput("gas", "Choose the Gas:",
+      list( "Regular", "Premium")
+    ),
+               
+               
+            ),
+            mainPanel(
+                HTML('<textarea id="ta" class="form-control shiny-text-output"',
+                     'style="resize:none; height:300px;" readonly></textarea>'
+                )
+            )
+        )
+    ),
+    server = function(input, output, session) {
+        output$ta <- renderText({
+            lat1<-input$lat
+            lon1<-input$lon
+            result<-data.frame()
+            for (i in seq(1:nrow(fp))){
+              lat2<-fp$lat[i]
+              lon2<-fp$lon[i]
+              GW<-google_distance(origins = list(c(lat1,lon1)),
+                destinations = list(c(lat2,lon2)),
+                key = key, 
+                simplify = T,
+                units = "imperial")
+              temp<-data.frame(Address=fp$Address[i],
+                               Regular=fp$Cost_Normal[i],
+                               Premium=fp$Cost_Premium[i],
+                            distance=GW$rows$elements[[1]]$distance$value)
+              result<-rbind(result,temp)
+            }
+            result1<-result[order(result$distance),]
+            if (input$gas=="Regular"){
+                paste(c(paste0("Three recommended gas stations, from near to far!"),
+                      paste0("Recommendation 1"),
+                      paste0("Address:",result1$Address[1]),
+                      paste0("Gas Use:", round(result1$distance[1]/1000/input$mpg, digits = 2)," Gallons"),
+                      paste0("Gas Price:",result1$Regular[1]),
+                      paste0("Recommendation 2"),
+                      paste0("Address:",result1$Address[2]),
+                      paste0("Gas Use:", round(result1$distance[2]/1000/input$mpg, digits = 2)," Gallons"),
+                      paste0("Gas Price:",result1$Regular[2]),
+                      ),
+                      collapse='\n')
+            }else{
+              paste(c(paste0("Three recommended gas stations, from near to far！"),
+                      paste0("Recommendation 1"),
+                      paste0("Address:",result1$Address[1]),
+                      paste0("Gas Use:", round(result1$distance[1]/1000/input$mpg, digits = 2)," Gallons"),
+                      paste0("Gas Price:",result1$Premium[1]),
+                      paste0("Recommendation 2"),
+                      paste0("Address:",result1$Address[2]),
+                      paste0("Gas Use:",result1$distance[2]/1000/input$mpg," Gallons"),
+                      paste0("Gas Price:",result1$Premium[2]),
+                     ),
+                      collapse='\n')
+            }
+            
+          
+          
+
+        })
+    })
+
+```
+
