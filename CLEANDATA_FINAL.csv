@@ -1,0 +1,232 @@
+"Year","Type","Model","City_MPG"
+2000,"Plymouth","Breeze",26
+2000,"Plymouth","Grand Voyager",18
+2001,"Daewoo","Lanos",26
+2001,"Plymouth","Neon",27
+2001,"Plymouth","Prowler",17
+2002,"Daewoo","Lanos",26
+2002,"Daewoo","Leganza",20
+2002,"Daewoo","Nubira",22
+2003,"Oldsmobile","Alero",24
+2004,"Oldsmobile","Alero",24
+2004,"Oldsmobile","Bravada",16
+2004,"Oldsmobile","Silhouette",19
+2004,"Saleen","S7",10
+2005,"Saleen","S7",10
+2006,"Morgan","Aero8",14
+2006,"Saleen","S7",10
+2007,"Isuzu","Ascender",16
+2007,"Morgan","Aero8",14
+2007,"Saleen","S7",10
+2007,"Spyker","C8 Double 12 S",14
+2008,"Bugatti","Veyron",8
+2008,"Isuzu","Ascender",14
+2008,"Isuzu","i-290",18
+2008,"Isuzu","i-370",15
+2008,"Morgan","Aero8",NA
+2009,"Bugatti","Veyron",8
+2009,"HUMMER","H2 SUT",NA
+2009,"HUMMER","H2 SUV",NA
+2009,"Morgan","Aero8",NA
+2009,"Pontiac","G3",27
+2009,"Saturn","Astra",24
+2009,"Saturn","Aura",22
+2009,"Saturn","Aura Hybrid",26
+2009,"Saturn","OUTLOOK",17
+2009,"Spyker","C8 Aileron",13
+2009,"Spyker","C8 Laviolette",13
+2009,"Spyker","C8 Spyder",13
+2010,"Bugatti","Veyron",8
+2010,"HUMMER","H3 SUV",14
+2010,"HUMMER","H3T",14
+2010,"Pontiac","G3",27
+2010,"Pontiac","G6",22
+2010,"Pontiac","Vibe",26
+2011,"Bugatti","Veyron",7
+2011,"Fisker","Karma",NA
+2011,"Maybach","57",10
+2011,"Mercury","Grand Marquis",16
+2011,"Mercury","Mariner",21
+2011,"Mercury","Mariner Hybrid",34
+2011,"Mercury","Milan",22
+2011,"Saab","9-3",21
+2011,"Saab","9-3",21
+2011,"Saab","9-3",21
+2011,"Saab","9-3",21
+2011,"THINK","THINK City",NA
+2012,"Fisker","Karma",55
+2012,"Maybach","57",10
+2012,"Maybach","62",10
+2012,"Maybach","Landaulet",10
+2012,"Saab","9-3",20
+2012,"Saab","9-3X",30
+2012,"Suzuki","Equator",19
+2013,"Suzuki","Grand Vitara",19
+2013,"Suzuki","Kizashi",20
+2013,"Suzuki","SX4",22
+2016,"Scion","FR-S",22
+2016,"Scion","iA",31
+2016,"Scion","iM",27
+2016,"Scion","tC",23
+2017,"Lotus","Evora 400",16
+2017,"smart","fortwo",31
+2017,"smart","fortwo electric drive",124
+2018,"Lotus","Evora 400",16
+2018,"smart","fortwo electric drive",124
+2019,"smart","EQ fortwo",124
+2020,"FIAT","124 Spider",25
+2020,"FIAT","500L",22
+2020,"Lotus","Evora GT",17
+2021,"FIAT","500X",24
+2021,"Lotus","Evora GT",17
+2021,"Polestar","1",NA
+2021,"Polestar","2",96
+2022,"Acura","TLX",22
+2022,NA,NA,24
+2022,NA,NA,22
+2022,"Bentley","Continental GT",16
+2022,"Bentley","Flying Spur",15
+2022,"Chrysler","Pacifica",19
+2022,"Ferrari","296 GTB",NA
+2022,"FIAT","500X",24
+2022,"Genesis","GV80",21
+2022,"INFINITI","QX60",21
+2022,"Lamborghini","Aventador SVJ",9
+2022,"Lamborghini","Huracan EVO",13
+2022,"Lucid","Air",NA
+2022,"Mazda","CX-30",24
+2022,"McLaren","720S",15
+2022,"Polestar","2",94
+2022,"Rivian","R1S",NA
+2022,"Rivian","R1T",NA
+2022,NA,NA,12
+2023,"Acura","MDX",19
+2023,"Acura","RDX",21
+2023,"Acura","TLX",22
+2023,NA,NA,24
+2023,NA,NA,22
+2023,NA,NA,14
+2023,NA,NA,14
+2023,NA,NA,14
+2023,"Audi","A4",24
+2023,"Audi","Q4 e-tron",97
+2023,"Audi","R8",13
+2023,"Audi","RS 6 Avant",14
+2023,"BMW","330e",NA
+2023,"BMW","M340",23
+2023,"BMW","X5 PHEV",NA
+2023,"BMW","X7",21
+2023,"Buick","Enclave",18
+2023,"Buick","Envision",23
+2023,"Cadillac","CT5-V",18
+2023,"Cadillac","Escalade",14
+2023,"Cadillac","LYRIQ",97
+2023,"Cadillac","XT5",22
+2023,"Chevrolet","Camaro",19
+2023,"Chevrolet","Silverado 1500",19
+2023,"Chevrolet","Suburban",15
+2023,"Chevrolet","Tahoe",15
+2023,"Chrysler","300",19
+2023,"Chrysler","Pacifica",19
+2023,"Dodge","Challenger",18
+2023,"Dodge","Charger",18
+2023,"Dodge","Durango",19
+2023,"Dodge","Hornet",NA
+2023,"Ford","Bronco",20
+2023,"Ford","Explorer",21
+2023,"Ford","Mustang",21
+2023,"Ford","Transit Connect",24
+2023,"Genesis","G90",18
+2023,"Genesis","GV70",22
+2023,"Genesis","GV80",20
+2023,"GMC","Acadia",22
+2023,"GMC","Sierra 1500",19
+2023,"GMC","Sierra 2500HD",NA
+2023,"GMC","Sierra 3500HD",NA
+2023,"Honda","Civic Type R",22
+2023,"Honda","CR-V",27
+2023,"Honda","HR-V",26
+2023,"Honda","Odyssey",19
+2023,"Hyundai","Elantra",33
+2023,"Hyundai","Santa Cruz",22
+2023,"Hyundai","Santa Fe",25
+2023,"Hyundai","Tucson",26
+2023,"INFINITI","QX60",21
+2023,"Jaguar","XF",25
+2023,"Jeep","Gladiator",16
+2023,"Jeep","Grand Cherokee",19
+2023,"Jeep","Grand Cherokee L",19
+2023,"Jeep","Wrangler",17
+2023,"Kia","Carnival",19
+2023,"Kia","Forte",28
+2023,"Kia","Seltos",29
+2023,"Kia","Telluride",20
+2023,NA,NA,18
+2023,NA,NA,18
+2023,NA,NA,20
+2023,NA,NA,19
+2023,"Lexus","ES 300h",43
+2023,"Lexus","ES 350",22
+2023,"Lexus","GX 460",15
+2023,"Lexus","UX 250h",43
+2023,"Lincoln","Aviator",18
+2023,"Lincoln","Corsair",21
+2023,"Lincoln","Nautilus",21
+2023,"Lincoln","Navigator",NA
+2023,"Lordstown","Endurance",NA
+2023,"Lucid","Air",NA
+2023,"Maserati","Ghibli",17
+2023,"Maserati","Grecale",22
+2023,"Maserati","Levante",16
+2023,"Maserati","Quattroporte",16
+2023,"Mazda","CX-5",24
+2023,"Mazda","CX-50",24
+2023,"Mazda","Mazda3",26
+2023,"McLaren","720S",15
+2023,"McLaren","Artura",NA
+2023,"McLaren","GT",15
+2023,NA,NA,21
+2023,NA,NA,20
+2023,NA,NA,20
+2023,NA,NA,16
+2023,"MINI","Clubman",22
+2023,"MINI","Convertible",27
+2023,"MINI","Countryman",26
+2023,"MINI","Hardtop",27
+2023,"Mitsubishi","Mirage",36
+2023,"Mitsubishi","Mirage G4",35
+2023,"Mitsubishi","Outlander",24
+2023,"Mitsubishi","Outlander PHEV",NA
+2023,"Nissan","Altima",27
+2023,"Nissan","Frontier",18
+2023,"Nissan","Pathfinder",20
+2023,"Nissan","Rogue",30
+2023,"Polestar","2",105
+2023,"Porsche","718 Boxster",20
+2023,"Porsche","718 Cayman",20
+2023,"Porsche","911",15
+2023,"Porsche","Taycan",82
+2023,"RAM","1500",20
+2023,"RAM","2500",NA
+2023,"RAM","3500",NA
+2023,"RAM","ProMaster 2500",NA
+2023,"Subaru","Ascent",20
+2023,"Subaru","Crosstrek",22
+2023,"Subaru","Legacy",27
+2023,"Subaru","Outback",26
+2023,"Tesla","Model 3",138
+2023,"Tesla","Model S",124
+2023,"Tesla","Model X",107
+2023,"Tesla","Model Y",127
+2023,"Toyota","4Runner",16
+2023,"Toyota","Camry",28
+2023,"Toyota","RAV4",27
+2023,"Toyota","Tundra Hybrid",20
+2023,"Volkswagen","Atlas",21
+2023,"Volkswagen","Atlas Cross Sport",21
+2023,"Volkswagen","ID.4",115
+2023,"Volkswagen","Tiguan",23
+2023,"Volvo","V60 Recharge Plug-In Hybrid",NA
+2023,"Volvo","XC40",24
+2023,"Volvo","XC60 Recharge Plug-In Hybrid",NA
+2023,"Volvo","XC90",22
